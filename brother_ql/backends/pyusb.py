@@ -78,7 +78,11 @@ class BrotherQLBackendPyUSB(BrotherQLBackendGeneric):
             vendor, product = int(vendor, 16), int(product, 16)
             for result in list_available_devices():
                 printer = result['instance']
-                if printer.idVendor == vendor and printer.idProduct == product or (serial and printer.iSerialNumber == serial):
+                if (
+                    printer.idVendor == vendor and
+                    printer.idProduct == product and
+                    (True if serial == "" else printer.serial_number == serial)
+                ):
                     self.dev = printer
                     break
             if self.dev is None:
